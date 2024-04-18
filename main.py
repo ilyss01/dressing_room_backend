@@ -39,8 +39,9 @@ def replaceClothesRegion(sourceShape, destinationShape):
 
 def main():
     # matplotlib backend. doesn't properly work on wayland
-    matplotlib.use('TkAgg')
-    debug = int(os.environ['DEBUG'])  # was taken from tinygrad
+    if os.name() == 'posix':
+        matplotlib.use('TkAgg')
+    debug = os.getenv('DEBUG', 0)  # was taken from tinygrad
     # sample_image = cv2.imread('human.jpg')
     # img = cv2.cvtColor(sample_image, cv2.COLOR_BGR2RGB)
     # plt.imshow(img)
@@ -50,6 +51,8 @@ def main():
     same_img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
     ret, thresh = cv.threshold(gray, 0, 255,
                                cv.THRESH_BINARY_INV+cv.THRESH_OTSU)
+
+    # TODO: refactor and move to separate function this shit
     if debug == 1:
         grid = plt.figure(figsize=(10, 7))
         grid.add_subplot(2, 2, 1)
